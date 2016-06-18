@@ -5,7 +5,11 @@ import android.os.Handler;
 import android.os.Message;
 import android.widget.ListView;
 
+import java.util.List;
+
+import adapter.Adapter_listview;
 import bean.NewsBean;
+import bean.NewsContent;
 import constante.Constante;
 import httptools.HttpUtils;
 
@@ -20,8 +24,10 @@ public class MainActivity extends BaseActivity{
 
             switch(msg.what){
                 case Constante.PARSER_SUCCESS:
-
-
+                    NewsBean bean= (NewsBean) msg.obj;
+                    List<NewsContent> list=bean.getT1348647853363();
+                    Adapter_listview adapterListview=new Adapter_listview(MainActivity.this,getLayoutInflater(),list);
+                listview.setAdapter(adapterListview);
 
                 break;
                 case Constante.PARSER_FAILED:
