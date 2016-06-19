@@ -1,12 +1,15 @@
 package adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v4.view.PagerAdapter;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.microsoft.wangyinews.DetailPagerActivity;
 
 import java.util.List;
 
@@ -43,6 +46,20 @@ public class MyViewPagerAdapter extends PagerAdapter{
         img.setScaleType(ImageView.ScaleType.CENTER_CROP);
         Glide.with(context).load(list.get(position).getImgsrc()).into(img);
         container.addView(img);
+
+        img.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                Toast.makeText(context, "click", Toast.LENGTH_SHORT).show();
+
+                context.startActivity(new Intent(context, DetailPagerActivity.class));
+
+
+
+
+
+            }
+        });
 
         return img;
     }

@@ -2,6 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
 
     android:layout_width="match_parent"
+    android:padding="5dp"
     android:layout_height="match_parent">
 
     <ImageView
@@ -9,17 +10,19 @@
         android:layout_width="68dp"
         android:layout_height="68dp"
         android:scaleType="centerCrop"
-        android:src="@mipmap/ic_launcher" />
+        android:src="@mipmap/ic_launcher"
+        android:paddingLeft="5dp"
+        />
 
 
     <TextView
         android:id="@+id/title_generalview"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-
+        android:textSize="16sp"
         android:singleLine="true"
         android:ellipsize="end"
-
+        android:paddingLeft="5dp"
 
         android:layout_alignParentTop="true"
         android:layout_toRightOf="@id/img_generalview"
@@ -30,8 +33,10 @@
         android:layout_height="wrap_content"
 
         android:maxLines="3"
+        android:lines="3"
         android:ellipsize="end"
-
+        android:paddingLeft="5dp"
+        android:lineSpacingExtra="3dp"
         android:layout_toRightOf="@id/img_generalview"
         android:layout_below="@id/title_generalview"
 

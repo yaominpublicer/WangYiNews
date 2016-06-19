@@ -108,7 +108,7 @@ public class HttpUtils{
 
                 //解析普通项（一定要解析到）
                 String title=subContetObject.getString("title");
-                Log.e("parserJsonToNewSBean: ","title:"+title );
+              //  Log.e("parserJsonToNewSBean: ","title:"+title );
                 String digest=subContetObject.getString("digest");
                 String imgsrc=subContetObject.getString("imgsrc");
 

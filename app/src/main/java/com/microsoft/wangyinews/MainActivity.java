@@ -3,7 +3,8 @@ package com.microsoft.wangyinews;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import java.util.List;
@@ -28,7 +29,7 @@ public class MainActivity extends BaseActivity{
                     NewsBean bean= (NewsBean) msg.obj;
                     List<NewsContent> list=bean.getT1348647853363();
                     Adapter_listview adapterListview=new Adapter_listview(MainActivity.this,getLayoutInflater(),list);
-                    Log.e("handleMessage: ","----adapter----" );
+
 
                 listview.setAdapter(adapterListview);
 
@@ -50,6 +51,16 @@ public class MainActivity extends BaseActivity{
         listview = (ListView) findViewById(R.id.listview);
 
         initData(Constante.newsUrl);
+
+        listview.setOnItemClickListener(new AdapterView.OnItemClickListener(){
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id){
+
+
+
+            }
+        });
+
     }
 
 

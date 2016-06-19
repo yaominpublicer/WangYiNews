@@ -3,11 +3,13 @@ package adapter;
 import android.content.Context;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -22,23 +24,22 @@ import bean.NewsContent;
  */
 public class Adapter_listview extends BaseAdapter{
 
-    private static final int AD=0;
-    private static final int GENERAL=1;
-    private static final int SET=2;
+    private static final int AD = 0;
+    private static final int GENERAL = 1;
+    private static final int SET = 2;
+    private  int prePosition=0;
 
     private Context context;
     private LayoutInflater inflater;
     private List<NewsContent> list;
+    private static LinearLayout dotcontainer;
+    private static boolean isDisplay=true;
 
-    public Adapter_listview(Context context, LayoutInflater inflater,List<NewsContent> list){
-
-        this.context=context;
-        this.inflater=inflater;
-        this.list=list;
-
+    public Adapter_listview(Context context, LayoutInflater inflater, List<NewsContent> list){
+        this.context = context;
+        this.inflater = inflater;
+        this.list = list;
     }
-
-
 
     @Override
     public int getCount(){
@@ -57,38 +58,28 @@ public class Adapter_listview extends BaseAdapter{
 
     @Override
     public int getItemViewType(int position){
-
-        NewsContent newsContent=list.get(position);
-
+        NewsContent newsContent = list.get(position);
         if(newsContent.getAds() != null){
-
             return AD;
         }else if(newsContent.getImgextra() != null){
             return SET;
-        }else {
-
+        }else{
             return GENERAL;
         }
-
-
-
     }
 
     @Override
     public int getViewTypeCount(){
-
         return 3;
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent){
-
-        AdViewHoler adViewHoler=null;
-        GeneralViewHoler generalViewHoler=null;
-        PhotoSetViewHoler setViewHoler=null;
-
-        int itemType=getItemViewType(position);
-        if(convertView ==null){
+        AdViewHoler adViewHoler = null;
+        GeneralViewHoler generalViewHoler = null;
+        PhotoSetViewHoler setViewHoler = null;
+        int itemType = getItemViewType(position);
+        if(convertView == null){
             switch(itemType){
                 case AD:
                     convertView = inflater.inflate(R.layout.viewpager_layout, parent, false);
@@ -114,7 +105,7 @@ public class Adapter_listview extends BaseAdapter{
                     setViewHoler.img03 = ((ImageView) convertView.findViewById(R.id.img03_photoset));
                     break;
             }
-        }else {
+        }else{
             switch(itemType){
                 case AD:
                     adViewHoler = (AdViewHoler) convertView.getTag();
@@ -126,17 +117,25 @@ public class Adapter_listview extends BaseAdapter{
                     setViewHoler = (PhotoSetViewHoler) convertView.getTag();
                     break;
             }
-
         }
-
-
-
         switch(itemType){
             case AD:
+                final NewsContent news = list.get(position);
+                adViewHoler.title.setText("\u3000\u3000"+news.getAds().get(0).getTitle());
+                MyViewPagerAdapter adapter = new MyViewPagerAdapter(context, news.getAds());
+                //指示点：
+                if(isDisplay){
+                    initDot(context, convertView, news.getAds().size());
 
-                 final NewsContent news=list.get(position);
-                adViewHoler.title.setText( news.getAds().get(0).getTitle());
-                MyViewPagerAdapter adapter=new MyViewPagerAdapter(context,news.getAds());
+                }else {
+
+                    dotcontainer.getChildAt(prePosition).setEnabled(false);
+                }
+                 dotcontainer.getChildAt(0).setEnabled(true);
+
+
+
+
 
                 adViewHoler.viewPager.setAdapter(adapter);
                 final AdViewHoler finalAdViewHoler = adViewHoler;
@@ -148,10 +147,12 @@ public class Adapter_listview extends BaseAdapter{
 
                     @Override
                     public void onPageSelected(int position){
-
-                        finalAdViewHoler1.title.setText(news.getAds().get(position).getTitle());
-
-
+                        finalAdViewHoler1.title.setText("\u3000\u3000" + news.getAds().get(position).getTitle());
+                        dotcontainer.getChildAt(0).setEnabled(false);
+                        dotcontainer.getChildAt(prePosition).setEnabled(false);
+                        dotcontainer.getChildAt(position).setEnabled(true);
+                        prePosition = position;
+                        //   Toast.makeText(context, ""+position, Toast.LENGTH_SHORT).show();
                     }
 
                     @Override
@@ -164,62 +165,60 @@ public class Adapter_listview extends BaseAdapter{
             case GENERAL:
                 Glide.with(context).load(list.get(position).getImgsrc()).into(generalViewHoler.img);
                 generalViewHoler.title.setText(list.get(position).getTitle());
-                generalViewHoler.content.setText(list.get(position).getDigest());
-
+                generalViewHoler.content.setText("\u3000\u3000" + list.get(position).getDigest().trim());
                 break;
             case SET:
-                Log.e("getView: ", "----adapter----position"+position);
-                setViewHoler.title.setText(list.get(position).getTitle());
-                Log.e("getView: ", "----adapter----title"+list.get(position).getTitle());
-                Glide.with(context).load(list.get(position).getImgsrc()).into(setViewHoler.img01);
-                Glide.with(context).load(list.get(position).getImgextra().get(0).getImgsrc()).into(setViewHoler.img02);
-                Glide.with(context).load(list.get(position).getImgextra().get(1).getImgsrc()).into(setViewHoler.img03);
+                try{
+                    setViewHoler.title.setText(list.get(position).getTitle());
+                    Glide.with(context).load(list.get(position).getImgsrc()).into(setViewHoler.img01);
+                    Glide.with(context).load(list.get(position).getImgextra().get(0).getImgsrc()).into(setViewHoler.img02);
+                    Glide.with(context).load(list.get(position).getImgextra().get(1).getImgsrc()).into(setViewHoler.img03);
+                }catch(Exception e){
+                    Log.e("getView: ", "----adapter----position:" + position);
+                    Log.e("getView: ", "----adapter----title" + list.get(position).getTitle());
+                    e.printStackTrace();
+                }
                 break;
         }
-
-
-
-
-
-
-
-
-
-
-
-
-
         return convertView;
     }
 
+    private  void initDot(Context context_sub, View convertView, int size){
 
+        isDisplay =false;
+
+        dotcontainer = (LinearLayout) convertView.findViewById(R.id.dotcontainer_viewpager);
+
+        for(int i = 0; i < size; i++){
+            ImageView imgDot = new ImageView(context_sub);
+            int mywidth = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 8f, context_sub.getResources().getDisplayMetrics());
+            int myheight = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 8f, context_sub.getResources().getDisplayMetrics());
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(mywidth, myheight);
+            params.leftMargin = 10;
+            imgDot.setLayoutParams(params);
+           imgDot.setBackgroundResource(R.drawable.dot_selector);
+            imgDot.setEnabled(false);
+            dotcontainer.addView(imgDot);
+        }
+    }
 
     class AdViewHoler{
 
         ViewPager viewPager;
         TextView title;
-
     }
+
     class GeneralViewHoler{
         ImageView img;
         TextView title;
         TextView content;
-
     }
+
     class PhotoSetViewHoler{
 
         TextView title;
         ImageView img01;
         ImageView img02;
         ImageView img03;
-
     }
-
-
-
-
-
-
-
-
 }
