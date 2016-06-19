@@ -2,6 +2,7 @@ package adapter;
 
 import android.content.Context;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -167,10 +168,12 @@ public class Adapter_listview extends BaseAdapter{
 
                 break;
             case SET:
-
-                Glide.with(context).load(list.get(position).getImgextra().get(0).getImgsrc()).into(setViewHoler.img01);
-                Glide.with(context).load(list.get(position).getImgextra().get(1).getImgsrc()).into(setViewHoler.img02);
-                Glide.with(context).load(list.get(position).getImgextra().get(2).getImgsrc()).into(setViewHoler.img03);
+                Log.e("getView: ", "----adapter----position"+position);
+                setViewHoler.title.setText(list.get(position).getTitle());
+                Log.e("getView: ", "----adapter----title"+list.get(position).getTitle());
+                Glide.with(context).load(list.get(position).getImgsrc()).into(setViewHoler.img01);
+                Glide.with(context).load(list.get(position).getImgextra().get(0).getImgsrc()).into(setViewHoler.img02);
+                Glide.with(context).load(list.get(position).getImgextra().get(1).getImgsrc()).into(setViewHoler.img03);
                 break;
         }
 
@@ -186,7 +189,7 @@ public class Adapter_listview extends BaseAdapter{
 
 
 
-        return null;
+        return convertView;
     }
 
 

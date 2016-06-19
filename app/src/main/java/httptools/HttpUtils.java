@@ -1,5 +1,7 @@
 package httptools;
 
+import android.util.Log;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -42,6 +44,7 @@ public class HttpUtils{
                     strbuffer.append(line);
                 }
                 String returnedString = strbuffer.toString();
+                Log.d("downLoadJSONString: ",returnedString);
                 return returnedString;
             }
 
@@ -76,7 +79,7 @@ public class HttpUtils{
                     JSONArray adsArray = subContetObject.getJSONArray("ads");
                     for(int j = 0; j < adsArray.length(); j++){
                         NewsContent.AdsBean adsBean = new NewsContent.AdsBean();
-                        JSONObject adsobj = adsArray.getJSONObject(i);
+                        JSONObject adsobj = adsArray.getJSONObject(j);
                         String title = adsobj.getString("title");
                         String imgsrc = adsobj.getString("imgsrc");
                         adsBean.setTitle(title);
@@ -104,22 +107,24 @@ public class HttpUtils{
 
 
                 //解析普通项（一定要解析到）
-                String ltitle=subContetObject.getString("ltitle");
+                String title=subContetObject.getString("title");
+                Log.e("parserJsonToNewSBean: ","title:"+title );
                 String digest=subContetObject.getString("digest");
                 String imgsrc=subContetObject.getString("imgsrc");
 
-                newsContent.setLtitle(ltitle);
+                newsContent.setTitle(title);
                 newsContent.setDigest(digest);
                 newsContent.setImgsrc(imgsrc);
 
 
                 contentsList.add(newsContent);
 
-                NewsBean newsbean=new NewsBean(contentsList);
-                return newsbean;
 
             }
 
+
+            NewsBean newsbean=new NewsBean(contentsList);
+            return newsbean;
 
         }catch(JSONException e){
             e.printStackTrace();

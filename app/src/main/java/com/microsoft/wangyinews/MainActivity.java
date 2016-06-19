@@ -3,6 +3,7 @@ package com.microsoft.wangyinews;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 import android.widget.ListView;
 
 import java.util.List;
@@ -27,6 +28,8 @@ public class MainActivity extends BaseActivity{
                     NewsBean bean= (NewsBean) msg.obj;
                     List<NewsContent> list=bean.getT1348647853363();
                     Adapter_listview adapterListview=new Adapter_listview(MainActivity.this,getLayoutInflater(),list);
+                    Log.e("handleMessage: ","----adapter----" );
+
                 listview.setAdapter(adapterListview);
 
                 break;
@@ -67,12 +70,19 @@ public class MainActivity extends BaseActivity{
                 }
                 NewsBean newsBean = HttpUtils.parserJsonToNewSBean(jsonString);
                 if(newsBean != null){
+
                     Message message = Message.obtain();
                     message.what = Constante.PARSER_SUCCESS;
                     message.obj = newsBean;
                     myHandler.sendMessage(message);
                 }else{
                     myHandler.sendEmptyMessage(Constante.PARSER_FAILED);
+
+                    try{
+                        throw new Exception(" ----解析对象为空 ----");
+                    }catch(Exception e){
+                        e.printStackTrace();
+                    }
                 }
             }
         }).start();
